@@ -9,3 +9,14 @@
   flex-direction: column;
   line-height: 1.5rem;
 }
+
+.destination-item:hover {
+  background-color: rgb(27, 27, 27, 0.4);
+}
+.destination-item {
+  padding: 1rem;
+  & h3 {
+    margin: 0;
+    margin-bottom: 1.5rem;
+  }
+}

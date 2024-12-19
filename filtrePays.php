@@ -1,26 +1,26 @@
 <?php
 /*
-plugin name: Filtre Post
+plugin name: Filtre-Pays
 description: Une extension qui permettra de filtrer les articles de la page web.
 author: Sébastien Malo Jean
-author uri: https://github.com/sebastien-malo-jean/31w_filtrePost
+author uri: https://github.com/sebastien-malo-jean/filtre-pays
 */
 
 function charger_scripts_css(){
  
     $version_css = filemtime(plugin_dir_path(__FILE__). "/style.css");
-    $version_js = filemtime(plugin_dir_path(__FILE__) . "js/filtrePost.js");
+    $version_js = filemtime(plugin_dir_path(__FILE__) . "js/filtrePays.js");
  
     wp_enqueue_style(
-        "filtrePost",        
+        "filtrePays",        
         plugin_dir_url(__FILE__) . "/style.css",
         [],
         $version_css
     ) ;  
  
     wp_enqueue_script(
-        "filtrePost",      
-        plugin_dir_url(__FILE__) . "/js/filtrePost.js",
+        "filtrePays",      
+        plugin_dir_url(__FILE__) . "/js/filtrePays.js",
         [],
         $version_js,
         true
@@ -43,4 +43,4 @@ return '<div class="filtre__bouton">' . $content . '</div>
 
 
 
-add_shortcode("extraire_categorie", "genere_boutons");
+add_shortcode("filtre_pays", "genere_boutons");

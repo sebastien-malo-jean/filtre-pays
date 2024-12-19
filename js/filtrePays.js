@@ -1,56 +1,63 @@
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("Connexion reussi plugin filtrePays");
-  let filtre__bouton = document.querySelectorAll(".filtre__bouton button");
-  // console.log(filtre__bouton);
-  for (const element of filtre__bouton) {
+  console.log("Connexion réussie plugin filtrePays");
+
+  let filtreBoutons = document.querySelectorAll(".filtre__bouton button");
+
+  for (const element of filtreBoutons) {
     element.addEventListener("click", (evnt) => {
-      const categorie = evnt.target.dataset.id;
-      // console.log(categorie);
-      extraireListeCours();
+      const pays = evnt.target.dataset.pays;
+      extraireListeDestinations(pays);
 
-      function stripos(haystack, needle) {
-        // Convertit les deux chaînes en minuscules.
-        const Haystack = haystack.toLowerCase();
-        const Needle = needle.toLowerCase();
+      function extraireListeDestinations(pays) {
+        const url = `${
+          window.location.origin
+        }/31w/wp-json/wp/v2/posts?search=${encodeURIComponent(
+          pays
+        )}&per_page=30`;
 
-        // Recherche la position de `needle` dans `haystack`
-        return Haystack.indexOf(Needle);
-      }
-
-      function extraireListeCours() {
-        fetch(
-          `http://localhost/31w/wp-json/wp/v2/posts?categories=${categorie}&per_page=30`
-        )
-          // Conversion de la réponse en JSON
+        fetch(url)
           .then((response) => response.json())
           .then((data) => {
-            // Affiche les articles récupérés pour déboguer
-            // console.log("Articles récupérés:", data);
-            afficherArticles(data); // Appel à la fonction pour afficher les articles
+            // Filtrer les données pour exclure l'ID 196 (la galerie d'image)
+            const filteredData = data.filter((post) => post.id !== 196);
+            afficherDestinations(filteredData);
           })
           .catch((error) =>
-            console.error("Erreur lors de l’extraction des cours:", error)
-          ); // En cas d’erreur }
+            console.error(
+              "Erreur lors de l'extraction des destinations:",
+              error
+            )
+          );
       }
 
-      function afficherArticles(articles) {
-        // Sélectionne le conteneur où afficher les articles
-        const conteneurCours = document.querySelector(".contenu__restapi");
-        // console.log(conteneurCours);
+      function afficherDestinations(destinations) {
+        const conteneur = document.querySelector(".contenu__restapi");
+        conteneur.innerHTML = "";
 
-        conteneurCours.innerHTML = "";
+        destinations.forEach((destination) => {
+          const item = document.createElement("div");
+          item.className = "destination-item";
 
-        // Pour chaque article, crée un élément HTML pour l’afficher
-        articles.forEach((article) => {
-          // Crée un nouvel élément div pour chaque article
-          const item = document.createElement("a");
-          item.className = "destinations-item"; // Ajoute une classe pour la mise en forme
-          item.href = article.link;
-          const titre = article.title;
-          // console.log(titre.rendered);
-          item.textContent = titre.rendered;
-          // Ajoute le div créé dans le conteneur des cours
-          conteneurCours.appendChild(item);
+          const titre = document.createElement("h3");
+          titre.className = "destination-titre";
+          titre.textContent = "> " + destination.title.rendered;
+
+          const description = document.createElement("div");
+          description.className = "destination-description";
+          description.innerHTML = destination.excerpt.rendered;
+          description.style.display = "none";
+
+          titre.addEventListener("click", () => {
+            if (description.style.display === "none") {
+              description.style.display = "block";
+            } else {
+              description.style.display = "none";
+            }
+          });
+
+          item.appendChild(titre);
+          item.appendChild(description);
+          conteneur.appendChild(item);
         });
       }
     });

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("Connexion reussi plugin filtrePost");
+  console.log("Connexion reussi plugin filtrePays");
   let filtre__bouton = document.querySelectorAll(".filtre__bouton button");
   // console.log(filtre__bouton);
   for (const element of filtre__bouton) {
